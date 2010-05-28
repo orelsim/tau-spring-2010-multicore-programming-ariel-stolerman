@@ -7,14 +7,16 @@ import java.util.concurrent.locks.*;
  * Answer to exercise 97 in the book
  */
 public class Rooms {
+	// no need for memoy barrier due to lock use
+	
 	// number of rooms, m in the question
-	private volatile int numOfRooms;
+	private int numOfRooms;
 	// counter for how many threads are inside the currently active room
-	private volatile int threadsInside = 0;
+	private int threadsInside = 0;
 	// waiting queue for all rooms that threads wanted to enter into when another room is active
 	private RoomsQueue waitingRooms = new RoomsQueue();
 	// currently active room (-1 stands for none)
-	private volatile int activeRoom = -1;
+	private int activeRoom = -1;
 	// handlers for all rooms
 	private Rooms.Handler[] handlers;
 	
