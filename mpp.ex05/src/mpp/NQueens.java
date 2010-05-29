@@ -4,6 +4,12 @@ import java.util.concurrent.*;
 import java.util.*;
 
 public class NQueens {
+	// for debugging
+	private static boolean DEBUG = true;
+	private static void debug(String message){
+		if (DEBUG) System.out.println(message);
+	}
+	
 	// thread pool
 	private final ExecutorService pool;
 	// list for the solutions of the last computation
@@ -24,7 +30,9 @@ public class NQueens {
 	 * @return a list of all the solutions for the n-queens problem.
 	 */
 	public List<int[]> compute(int n){
-		List<int[]> res;
+		debug("compute was called for n = "+n);
+		
+		List<int[]> res = new ArrayList<int[]>();
 		int[] q = new int[n];
 		try{
 			res = pool.submit(new QueensTask(q, 0)).get();
@@ -61,18 +69,22 @@ public class NQueens {
 		 */
 		@SuppressWarnings("unchecked")
 		public List<int[]> call(){
+			debug("task was called for level "+n);
+			
+			int i = 0;
 			int N = q.length;
 			List<int[]> res = new ArrayList<int[]>();
 			
 			// solution found - return it
 	        if (n == N){
 	        	res.add(q);
+	        	debug("returning result for solution "+queensToVector(q));
 	        	return res;
 	        }
 	        // recursive call over remaining rows
 	        else {
 	        	Future<List<int[]>>[] tasks = new Future[N];  
-	            for (int i=0; i<N; i++){
+	            for (i=0; i<N; i++){
 	            	int[] copyQ = q.clone();
 	            	copyQ[n] = i;
 	                if (isConsistent(copyQ, n))
@@ -81,10 +93,11 @@ public class NQueens {
 	            // return results
 	            try{
 	            	// concatenate results
-	            	for (int i=0; i<N; i++) res.addAll(tasks[i].get());
+	            	for (i=0; i<N; i++) res.addAll(tasks[i].get());
 	            	return res;
 	            }catch (Exception e){
-	    			System.err.println("Task failed on level "+n+".");
+	    			System.err.println("Task failed on level "+n+" checking i="+i+".");
+	    			System.exit(-1);
 	    			return null;
 	    		}
 	        }
@@ -140,6 +153,16 @@ public class NQueens {
 		}  
 		res += "\n";
 		return res;
+	}
+	
+	/**
+	 * Returns a vector representation of a solution to the queens problem
+	 * @param q - a solution for the queens problem
+	 */
+	public static String queensToVector(int[] q){
+		String res = "(";
+		for (int i=0; i<q.length; i++) res += q[i]+",";
+		return res.substring(0,res.length()-1)+")";
 	}
 	
 	/**

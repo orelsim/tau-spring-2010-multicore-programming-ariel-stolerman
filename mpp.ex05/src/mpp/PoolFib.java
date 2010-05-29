@@ -40,8 +40,12 @@ class RunFibonacci
 
 		public Integer call()
 		{
-			if (number == 0 || number == 1)
+			if (number == 0 || number == 1){
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {}
 				return new Integer(1);
+			}
 			Future<Integer> task1 = pool.submit(new FibTask(number - 1));
 			Future<Integer> task2 = pool.submit(new FibTask(number - 2));
 			try {
