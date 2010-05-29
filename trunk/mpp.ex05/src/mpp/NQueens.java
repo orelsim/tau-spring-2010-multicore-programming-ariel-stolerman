@@ -4,34 +4,28 @@ import java.util.concurrent.*;
 import java.util.*;
 
 public class NQueens {
-	// for debugging
-	private static boolean DEBUG = true;
-	private static void debug(String message){
-		if (DEBUG) System.out.println(message);
-	}
-	
 	// thread pool
 	private final ExecutorService pool;
 	// list for the solutions of the last computation
-	private List<int[]> lastSolutions = null;
+	private List<int[]> solutions = null;
 	// the last n the problem was solved for
 	private int n;
 
 	/**
 	 * default constructor
+	 * @param n - number of queens to solve the problem for
 	 */
-	public NQueens(){
+	public NQueens(int n){
 		pool = Executors.newCachedThreadPool();
+		this.n = n;
+		this.solutions = compute();
 	}
 	
 	/**
 	 * Computes all solutions for the n-queens problem.
-	 * @param n - number of queens.
 	 * @return a list of all the solutions for the n-queens problem.
 	 */
-	public List<int[]> compute(int n){
-		debug("compute was called for n = "+n);
-		
+	public List<int[]> compute(){
 		List<int[]> res = new ArrayList<int[]>();
 		int[] q = new int[n];
 		try{
@@ -41,11 +35,6 @@ public class NQueens {
 			System.err.println("Main task failed.");
 			return null;
 		}
-		
-		// update results
-		this.n = n;
-		this.lastSolutions = res;
-		
 		return res;
 	}	
 	
@@ -65,12 +54,9 @@ public class NQueens {
 		}
 		
 		/**
-		 * 
+		 * Calls the computation of solutions for a given placing of n rows of queens 
 		 */
-		@SuppressWarnings("unchecked")
 		public List<int[]> call(){
-			debug("task was called for level "+n);
-			
 			int i = 0;
 			int N = q.length;
 			List<int[]> res = new ArrayList<int[]>();
@@ -78,22 +64,21 @@ public class NQueens {
 			// solution found - return it
 	        if (n == N){
 	        	res.add(q);
-	        	debug("returning result for solution "+queensToVector(q));
 	        	return res;
 	        }
 	        // recursive call over remaining rows
 	        else {
-	        	Future<List<int[]>>[] tasks = new Future[N];  
+	        	List<Future<List<int[]>>> tasks = new ArrayList<Future<List<int[]>>>();  
 	            for (i=0; i<N; i++){
 	            	int[] copyQ = q.clone();
 	            	copyQ[n] = i;
-	                if (isConsistent(copyQ, n))
-	                	tasks[i] = pool.submit(new QueensTask(copyQ,n+1));
+	                if (isConsistent(copyQ, n)) tasks.add(pool.submit(new QueensTask(copyQ,n+1)));
 	            }
 	            // return results
 	            try{
 	            	// concatenate results
-	            	for (i=0; i<N; i++) res.addAll(tasks[i].get());
+	            	for (i=0; i<tasks.size(); i++)
+	            		res.addAll(tasks.get(i).get());
 	            	return res;
 	            }catch (Exception e){
 	    			System.err.println("Task failed on level "+n+" checking i="+i+".");
@@ -126,12 +111,10 @@ public class NQueens {
 	 */
 	public String toString(){
 		String res;
-		if (lastSolutions == null) res = "No computation was called yet.";
-		else {
-			res = "Solutions for "+n+" queens:\n";
-			for (int[] sol: lastSolutions){
-				res += queensToString(sol);
-			}
+		res = "Found "+solutions.size()+" solutions for "+n+" queens:\n";
+		if (solutions.isEmpty()) res += "none!";
+		for (int[] sol: solutions){
+			res += queensToString(sol);
 		}
 		return res;
 	}
@@ -155,21 +138,13 @@ public class NQueens {
 	}
 	
 	/**
-	 * Returns a vector representation of a solution to the queens problem
-	 * @param q - a solution for the queens problem
-	 */
-	public static String queensToVector(int[] q){
-		String res = "(";
-		for (int i=0; i<q.length; i++) res += q[i]+",";
-		return res.substring(0,res.length()-1)+")";
-	}
-	
-	/**
 	 * Main for testing
 	 */
 	public static void main(String[] args) {
-		NQueens queens = new NQueens();
-		queens.compute(8);
-		System.out.println(queens);
+		NQueens queens;
+		for (int i=1; i<=8; i++){
+			queens = new NQueens(i);
+			System.out.println(queens);
+		}
 	}
 }
