@@ -97,7 +97,6 @@ public class NQueens {
 	            	return res;
 	            }catch (Exception e){
 	    			System.err.println("Task failed on level "+n+" checking i="+i+".");
-	    			System.exit(-1);
 	    			return null;
 	    		}
 	        }
