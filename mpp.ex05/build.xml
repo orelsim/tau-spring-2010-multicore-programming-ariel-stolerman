@@ -1,5 +1,4 @@
 <project name="Ex5" default="dist" basedir=".">
-<project name="Ex5" default="dist" basedir=".">
     <description>
         simple example build file
     </description>
