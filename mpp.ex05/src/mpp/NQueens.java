@@ -90,6 +90,7 @@ public class NQueens {
 		/**
 		 * Return true if queen placement q[n] does not conflict with
 		 * other queens q[0] through q[n-1]
+		 * Note: taken from http://www.cs.princeton.edu/introcs/23recursion/Queens.java.html
 		 */
 		private boolean isConsistent(int[] q, int n) {
 	        for (int i = 0; i < n; i++) {
