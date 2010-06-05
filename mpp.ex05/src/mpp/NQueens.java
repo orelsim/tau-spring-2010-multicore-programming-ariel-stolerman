@@ -70,10 +70,13 @@ public class NQueens {
 	        else {
 	        	List<Future<List<int[]>>> tasks = new ArrayList<Future<List<int[]>>>();  
 	            for (i=0; i<N; i++){
-	            	int[] copyQ = q.clone();
-	            	copyQ[n] = i;
-	                if (isConsistent(copyQ, n)) tasks.add(pool.submit(new QueensTask(copyQ,n+1)));
+	            	q[n] = i;
+	                if (isConsistent(q, n)){
+	                	int[] copyQ = q.clone();
+	                	tasks.add(pool.submit(new QueensTask(copyQ,n+1)));
+	                }
 	            }
+	            q = null;
 	            // return results
 	            try{
 	            	// concatenate results
