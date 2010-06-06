@@ -7,7 +7,7 @@ public class WaitSenseBarrier {
 	int size;
 	boolean sense;
 	ThreadLocal<Boolean> threadSense;
-	
+
 	public WaitSenseBarrier(int n) {
 		count = new AtomicInteger(n);
 		size = n;
@@ -16,19 +16,21 @@ public class WaitSenseBarrier {
 			protected Boolean initialValue() { return !sense; };
 		};
 	}
-	
-	public void await() {
+
+	public synchronized void await() {
 		boolean mySense = threadSense.get();
 		int position = count.getAndDecrement();
 		if (position == 1) {
 			count.set(size);
 			sense = mySense;
-			this.notifyAll();
-		} else try {
+			notifyAll();
+		} else {
 			while (sense != mySense) {
-				this.wait();
+				try {
+					wait();
+				} catch (InterruptedException e) {}
 			}
-		} catch (InterruptedException ie) {}
+		}
 		threadSense.set(!mySense);
 	}
 }
