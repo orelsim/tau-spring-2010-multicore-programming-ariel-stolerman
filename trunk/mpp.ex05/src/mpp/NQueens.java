@@ -116,11 +116,23 @@ public class NQueens {
 	public String toString(){
 		String res;
 		res = "Found "+solutions.size()+" solutions for "+n+" queens:\n";
-		if (solutions.isEmpty()) res += "none!";
+		if (solutions.isEmpty()) res += "None\n";
 		for (int[] sol: solutions){
 			res += queensToString(sol);
 		}
 		return res;
+	}
+	
+	/**
+	 * Returns a random solution from the list of solutions
+	 */
+	public String getRandomSolution(){
+		if (solutions.size() == 0){
+			return "None\n";
+		} else {
+			int index = (int) Math.floor(Math.random()*solutions.size());
+			return queensToString(solutions.get(index));
+		}
 	}
 	
 	/**
@@ -136,8 +148,7 @@ public class NQueens {
 				else res += "* ";
 			}
 			res += "\n";
-		}  
-		res += "\n";
+		}
 		return res;
 	}
 	
@@ -146,9 +157,10 @@ public class NQueens {
 	 */
 	public static void main(String[] args) {
 		NQueens queens;
-		for (int i=1; i<=8; i++){
+		for (int i=1; i<=9; i++){
 			queens = new NQueens(i);
-			System.out.println(queens);
+			System.out.println("Solution for "+i+" queens out of "+queens.solutions.size()+" queens:");
+			System.out.println(queens.getRandomSolution());
 		}
 	}
 }
