@@ -4,6 +4,10 @@ import java.util.concurrent.*;
 import java.util.*;
 
 public class NQueens {
+	
+	// for testing
+	static int THRESHOLD = 13;
+	
 	// thread pool
 	private final ExecutorService pool;
 	// solution
@@ -131,8 +135,7 @@ public class NQueens {
 	 */
 	public static void main(String[] args) {
 		NQueens queens;
-		int threshold = (args.length == 1 ? Integer.parseInt(args[0]) : 13);
-		for (int i=1; i<=threshold; i++){
+		for (int i=1; i<=THRESHOLD; i++){
 			queens = new NQueens(i);
 			System.out.println("Solution for "+i+" queens:\n"+queens);
 		}
