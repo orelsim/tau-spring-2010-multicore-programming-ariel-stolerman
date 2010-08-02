@@ -1,0 +1,56 @@
+Running on one thread (using "taskset -c 1" prefix to the run):
+===============================================================
+Ex2q1:
+------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 23026000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 23893000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 24252000
+Ex2q1fix:
+---------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 36361000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 34349000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 34493000
+
+Running on nova:
+================
+Ex2q1:
+------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 38957000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 54925000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 56481000
+Ex2q1fix:
+---------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 56280000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 70610000
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 78361000
+
+Running on aries:
+=================
+Ex2q1:
+------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 107264419
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 105316226
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 100083003
+Ex2q1fix:
+---------
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 167231261
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 135423129
+Done running 2 threads. Shared counter value is: 200000
+Total running time: 136573663
